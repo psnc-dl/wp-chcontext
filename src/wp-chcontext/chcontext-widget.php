@@ -112,13 +112,9 @@ class CHContext_Widget extends WP_Widget {
 		
 		/* Before widget (defined by themes). */
 		echo "\n".$before_widget."\n";
-
-		/* Display the widget title if one was input (before and after defined by themes). */
-		if ( $title )
-			echo $before_title . $title . $after_title."\n";
 	?>
 		<div id="<?php echo $id ?>" 
-			class="chsearch-widget-container" 
+			class="chsearch-widget-wrapper" 
 			data-searchProvider="<?php echo $provider ?>" 
 			data-resultCount="<?php echo $result_count ?>" 
 			data-show-img="<?php echo $showThumbsStr ?>" 
@@ -133,6 +129,12 @@ class CHContext_Widget extends WP_Widget {
 		}			
 		?>
 			>
+	<?php
+		/* Display the widget title if one was input (before and after defined by themes). */
+		if ( $title )
+			echo $before_title . $title . $after_title."\n";
+	?>
+
 		</div>
 		<?php
 		/* After widget (defined by themes). */
