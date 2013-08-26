@@ -12,6 +12,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
+define("CHCONTEXT_SCRIPT_URL", 'http://rawgithub.com/psnc-dl/chcontext/dev/dist/chcontext.js');
+ 
 /**
  * Add function to widgets_init that loads the widget.
  * @since 1.0
@@ -38,15 +40,15 @@ function chcontext_load_widgets() {
 function chcontext_init() {
 
  // Register and enqueue JS 
-  wp_register_script('chcontext-main', 'http://rawgithub.com/psnc-dl/chcontext/dev/src/chcontext.js');
+  wp_register_script('chcontext-main', CHCONTEXT_SCRIPT_URL);
   wp_enqueue_script('chcontext-main');
 
-  wp_register_script('chcontext-trans', WP_PLUGIN_URL . '/wp-chcontext/custom-translations.js');
+  wp_register_script('chcontext-trans', plugins_url('custom-translations.js', __FILE__ ));
   wp_enqueue_script('chcontext-trans');
 
   
   // Register and enqueue the stylesheet
-  wp_register_style('chcontext_custom_css', WP_PLUGIN_URL . '/wp-chcontext/custom.css' );
+  wp_register_style('chcontext_custom_css', plugins_url('custom.css', __FILE__ ));
   wp_enqueue_style('chcontext_custom_css');
 }
 
