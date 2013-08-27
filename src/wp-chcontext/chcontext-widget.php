@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: CHContext Widget
- * Plugin URI: https://github.com/psnc-dl/chsearch
+ * Plugin URI: https://github.com/psnc-dl/chcontext
  * Description: A widget that allows you to embed links to cultural heritage items from various sources, based on post tags.
  * Version: 1.0
  * Author: PSNC Digital Libraries Team
@@ -12,7 +12,9 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-define("CHCONTEXT_SCRIPT_URL", 'http://rawgithub.com/psnc-dl/chcontext/dev/dist/chcontext.js');
+define("CHCONTEXT_SCRIPT_URL", (is_ssl() ? 'https' : 'http').'://rawgithub.com/psnc-dl/chcontext/master/dist/chcontext.js');
+define("CUSTOM", "Custom");
+
  
 /**
  * Add function to widgets_init that loads the widget.
@@ -43,8 +45,8 @@ function chcontext_init() {
   wp_register_script('chcontext-main', CHCONTEXT_SCRIPT_URL);
   wp_enqueue_script('chcontext-main');
 
-  wp_register_script('chcontext-trans', plugins_url('custom-translations.js', __FILE__ ));
-  wp_enqueue_script('chcontext-trans');
+  wp_register_script('chcontext-custom-js', plugins_url('custom.js', __FILE__ ));
+  wp_enqueue_script('chcontext-custom-js');
 
   
   // Register and enqueue the stylesheet
@@ -89,6 +91,7 @@ class CHContext_Widget extends WP_Widget {
 		$result_count = $instance['result_count'];
 		$APIKey = $instance['API_key'];
 		$provider = $instance['provider'];
+		$customProvider = $instance['custom_function_name'];
 		$showThumbs = isset( $instance['show_thumbs'] ) ? $instance['show_thumbs'] : false;
 		$showThumbsStr = ($showThumbs) ? 'true' : 'false';
 
@@ -114,8 +117,12 @@ class CHContext_Widget extends WP_Widget {
 		echo "\n".$before_widget."\n";
 	?>
 		<div id="<?php echo $id ?>" 
-			class="chsearch-widget-wrapper" 
+			class="chcontext-widget-wrapper" 
+		<?php if(CUSTOM==$provider) { ?>
+			data-customSearchProvider="<?php echo $customProvider ?>" 
+		<?php } else { ?>
 			data-searchProvider="<?php echo $provider ?>" 
+		<?php } ?>
 			data-resultCount="<?php echo $result_count ?>" 
 			data-show-img="<?php echo $showThumbsStr ?>" 
 		<?php 
@@ -151,9 +158,14 @@ class CHContext_Widget extends WP_Widget {
 		$instance['title'] = strip_tags( $new_instance['title'] );
 		$instance['query_selector'] = strip_tags( $new_instance['query_selector'] );
 		$instance['result_count'] = strip_tags( $new_instance['result_count'] );
-		$instance['API_key'] = strip_tags( $new_instance['API_key'] );
-		$instance['provider'] = strip_tags( $new_instance['provider'] );
 		$instance['show_thumbs'] = isset( $new_instance['show_thumbs'] );
+
+		$instance['provider'] = strip_tags( $new_instance['provider'] );
+
+		$instance['API_key'] = strip_tags( $new_instance['API_key'] );
+
+		$instance['custom_function_name'] = strip_tags( $new_instance['custom_function_name'] );
+		
 		
 		return $instance;
 	}
@@ -166,19 +178,15 @@ class CHContext_Widget extends WP_Widget {
 	function form( $instance ) {
 
 		/* Set up some default widget settings. */
-		$defaults = array( 'title' => __('Related heritage', 'chcontext'), 'query_selector' => '', 'result_count' => 5, 'API_key' => '', 'provider' => 'FBC+', 'show_thumbs' => true);
-		$instance = wp_parse_args( (array) $instance, $defaults ); ?>
+		$defaults = array( 'title' => __('Related heritage', 'chcontext'), 'query_selector' => '', 'custom_function_name' => '', 'result_count' => 5, 'API_key' => '', 'provider' => 'FBC+', 'show_thumbs' => true);
+		$instance = wp_parse_args( (array) $instance, $defaults ); 
+		?>
+		
 
-		<!-- Widget Title: Text Input -->
+		<!-- Widget Title: Text Input -->		
 		<p>
 			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e('Title:', 'hybrid'); ?></label>
 			<input id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo $instance['title']; ?>" style="width:100%;" />
-		</p>
-
-		<!-- Query Selector: Text Input -->
-		<p>
-			<label for="<?php echo $this->get_field_id( 'query_selector' ); ?>"><?php _e('Query selector (leave empty to use post tags):', 'chcontenxt'); ?></label>
-			<input id="<?php echo $this->get_field_id( 'query_selector' ); ?>" name="<?php echo $this->get_field_name( 'query_selector' ); ?>" value="<?php echo $instance['query_selector']; ?>" style="width:100%;" />
 		</p>
 
 		<!-- Result count: Listbox -->
@@ -197,29 +205,84 @@ class CHContext_Widget extends WP_Widget {
 			</select>
 		</p>
 
-		<!-- Provider: Listbox -->
-		<p>
-			<label for="<?php echo $this->get_field_id( 'provider' ); ?>"><?php _e('Data provider:', 'chcontext'); ?></label> 
-			<select id="<?php echo $this->get_field_id( 'provider' ); ?>" name="<?php echo $this->get_field_name( 'provider' ); ?>" class="widefat" style="width:100%;">
-				<option <?php if ( 'DPLA' == $instance['provider'] ) echo 'selected="selected"'; ?>>DPLA</option>
-				<option <?php if ( 'Europeana' == $instance['provider'] ) echo 'selected="selected"'; ?>>Europeana</option>
-				<option <?php if ( 'FBC+' == $instance['provider'] ) echo 'selected="selected"'; ?>>FBC+</option>
-			</select>
-		</p>
-
-		<!-- API Key: Text Input -->
-		<p>
-			<label for="<?php echo $this->get_field_id( 'API_key' ); ?>"><?php _e('API Key (if required by provider):', 'chcontenxt'); ?></label>
-			<input id="<?php echo $this->get_field_id( 'API_key' ); ?>" name="<?php echo $this->get_field_name( 'API_key' ); ?>" value="<?php echo $instance['API_key']; ?>" style="width:100%;" />
-		</p>
-
 		<!-- Show thumbnails?: Checkbox -->
 		<p>
 			<input class="checkbox" type="checkbox" <?php checked( $instance['show_thumbs'], true ); ?> id="<?php echo $this->get_field_id( 'show_thumbs' ); ?>" name="<?php echo $this->get_field_name( 'show_thumbs' ); ?>" /> 
 			<label for="<?php echo $this->get_field_id( 'show_thumbs' ); ?>"><?php _e('Show thumbnails?', 'chcontext'); ?></label>
 		</p>
 
+		<!-- Query Selector: Text Input -->
+		<p>
+			<label for="<?php echo $this->get_field_id( 'query_selector' ); ?>"><?php _e('Query selector (jQuery syntax, empty = use post tags):', 'chcontenxt'); ?></label>
+			<input id="<?php echo $this->get_field_id( 'query_selector' ); ?>" name="<?php echo $this->get_field_name( 'query_selector' ); ?>" value="<?php echo $instance['query_selector']; ?>" style="width:100%;" />
+		</p>
+	
+		
+		<!-- Provider: Listbox -->
+		<p>
+			<label for="<?php echo $this->get_field_id( 'provider' ); ?>"><?php _e('Data provider:', 'chcontext'); ?></label> 
+			<select id="<?php echo $this->get_field_id( 'provider' ); ?>" name="<?php echo $this->get_field_name( 'provider' ); ?>" class="widefat" style="width:100%;">
+			</select>
+		</p>
 
+		<!-- API Key: Text Input -->
+		<p id="<?php echo $this->get_field_id( 'API_key' ); ?>-para">
+			<label for="<?php echo $this->get_field_id( 'API_key' ); ?>"><?php _e('API Key (if required by provider):', 'chcontenxt'); ?></label>
+			<input id="<?php echo $this->get_field_id( 'API_key' ); ?>" name="<?php echo $this->get_field_name( 'API_key' ); ?>" value="<?php echo $instance['API_key']; ?>" style="width:100%;" />
+		</p>
+
+		<!-- Custom function name: Text Input -->
+		<p id="<?php echo $this->get_field_id( 'custom_function_name' ); ?>-para">
+			<label for="<?php echo $this->get_field_id( 'custom_function_name' ); ?>"><?php _e('Name of the JS function for custom data provider:', 'chcontenxt'); ?></label>
+			<input id="<?php echo $this->get_field_id( 'custom_function_name' ); ?>" name="<?php echo $this->get_field_name( 'custom_function_name' ); ?>" value="<?php echo $instance['custom_function_name']; ?>" style="width:100%;" />
+		</p>
+
+			<script type='text/javascript'>
+				//Method for configuring optional fields visibility
+				function setupFormFieldsVisibility<?php echo $this->number;?>() {			
+					var select = document.getElementById("<?php echo $this->get_field_id( 'provider' ); ?>");					
+					var checkedName = select.options[select.selectedIndex].value;
+					var providers = PSNC.chcontext.searchProviders;
+					for(index in providers) {
+						if (providers[index].name == checkedName) {							
+							if(providers[index].requiresKey) {
+								jQuery("#<?php echo $this->get_field_id( 'API_key' ); ?>-para").show();
+							} else {
+								jQuery("#<?php echo $this->get_field_id( 'API_key' ); ?>-para").hide();
+							} 
+							jQuery("#<?php echo $this->get_field_id( 'custom_function_name' ); ?>-para").hide();
+							return;
+						}
+					}
+					//If we are here, then "Custom" search provider must be selected.
+					jQuery("#<?php echo $this->get_field_id( 'API_key' ); ?>-para").hide();
+					jQuery("#<?php echo $this->get_field_id( 'custom_function_name' ); ?>-para").show();					
+				}
+				
+				//Initial configuration of data providers list
+				var checked = "<?php echo $instance['provider'];?>";							
+				var select = document.getElementById("<?php echo $this->get_field_id( 'provider' ); ?>");				
+				var providers = PSNC.chcontext.searchProviders;
+				for(index in providers) {
+					select.options[select.options.length] = new Option(providers[index].name, providers[index].name);
+					if (providers[index].name == checked) {
+						select.options[select.options.length-1].selected="selected";
+					}
+				}
+				select.options[select.options.length] = new Option('<?php echo CUSTOM;?>', '<?php echo CUSTOM;?>');
+				if ('<?php echo CUSTOM;?>' == checked) {
+					select.options[select.options.length-1].selected="selected";
+				}
+				
+				//Initial visibility setup
+				setupFormFieldsVisibility<?php echo $this->number;?>();
+				
+				//Support for dynamic visibility changes
+				jQuery( "#<?php echo $this->get_field_id( 'provider' ); ?>" ).change(function() {
+					setupFormFieldsVisibility<?php echo $this->number;?>();
+				});
+								
+			</script>
 		
 	<?php
 	}
