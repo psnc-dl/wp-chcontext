@@ -12,7 +12,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-define("CHCONTEXT_SCRIPT_URL", (is_ssl() ? 'https' : 'http').'://rawgithub.com/psnc-dl/chcontext/master/dist/chcontext.js');
+define("CHCONTEXT_SCRIPT_URL", (is_ssl() ? 'https' : 'http').'://cdn.jsdelivr.net/chcontext/1.0.0/chcontext.min.js');
 define("CUSTOM", "Custom");
 
  
