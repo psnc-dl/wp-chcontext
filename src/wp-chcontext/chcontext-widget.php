@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: CHContext Widget
- * Plugin URI: https://github.com/psnc-dl/chcontext
+ * Plugin URI: https://github.com/psnc-dl/wp-chcontext
  * Description: A widget that allows you to embed links to cultural heritage items from various sources, based on post tags.
  * Version: 1.0
  * Author: PSNC Digital Libraries Team
@@ -10,6 +10,7 @@
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * Licence: https://raw.github.com/psnc-dl/wp-chcontext/master/LICENCE.txt
  */
 
 define("CHCONTEXT_SCRIPT_URL", (is_ssl() ? 'https' : 'http').'://cdn.jsdelivr.net/chcontext/1.0.0/chcontext.min.js');
