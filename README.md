@@ -6,6 +6,14 @@ It is able to provide a list of links to cultural heritage materials based on po
 See [our wiki](https://github.com/psnc-dl/wp-chcontext/wiki/CHContext-WordPress-Plugin-Description) for more information.
 
 
+## Version history
+**v.1.1** (2013/09/10)
+- Support for queries templates allowing to easily determine search scope
+- [CHContext](https://github.com/psnc-dl/chcontext) script is now included in the plugin instead of linking to remote file (to satisfy wordpress.org/plugins requirement).
+
+**v.1.0** (2013/08/28)
+- First public release
+
 ## Acknowledgements
 The widget is developed by [Digital Libraries Team](http://dl.psnc.pl/) of [Poznań Supercomputing and Networking Center](http://www.man.poznan.pl/).
 
