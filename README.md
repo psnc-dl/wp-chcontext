@@ -11,7 +11,7 @@ The widget is developed by [Digital Libraries Team](http://dl.psnc.pl/) of [Pozn
 
 This project was initiated and partially funded as a part of the [Europeana Awareness](http://pro.europeana.eu/web/europeana-awareness) project, financed under the ICT Policy Support Programme (ICT PSP) as part of the Competitiveness and Innovation Framework Programme by the European Community.
 
-## License
+## Licence
 Copyright (c) 2013 Poznań Supercomputing and Networking Center  
 Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence"). 
 
