@@ -3,7 +3,7 @@
  * Plugin Name: CHContext Widget
  * Plugin URI: https://github.com/psnc-dl/wp-chcontext
  * Description: A widget that allows you to embed links to cultural heritage items from various sources, based on post tags.
- * Version: 1.0
+ * Version: 1.1
  * Author: PSNC Digital Libraries Team
  * Author URI: http://dl.psnc.pl/
  *
@@ -13,7 +13,6 @@
  * Licence: https://raw.github.com/psnc-dl/wp-chcontext/master/LICENCE.txt
  */
 
-define("CHCONTEXT_SCRIPT_URL", (is_ssl() ? 'https' : 'http').'://cdn.jsdelivr.net/chcontext/1.0.0/chcontext.min.js');
 define("CUSTOM", "Custom");
 
  
@@ -43,7 +42,7 @@ function chcontext_load_widgets() {
 function chcontext_init() {
 
  // Register and enqueue JS 
-  wp_register_script('chcontext-main', CHCONTEXT_SCRIPT_URL);
+  wp_register_script('chcontext-main', plugins_url('chcontext.min-1.1.0.js', __FILE__ ));
   wp_enqueue_script('chcontext-main');
 
   wp_register_script('chcontext-custom-js', plugins_url('custom.js', __FILE__ ));
@@ -89,6 +88,7 @@ class CHContext_Widget extends WP_Widget {
 		/* Our variables from the widget settings. */
 		$title = apply_filters('widget_title', $instance['title'] );
 		$selector = $instance['query_selector'];
+		$template = $instance['query_template'];
 		$result_count = $instance['result_count'];
 		$APIKey = $instance['API_key'];
 		$provider = $instance['provider'];
@@ -130,9 +130,20 @@ class CHContext_Widget extends WP_Widget {
 		if(isset($APIKey) && (strlen($APIKey) >0) ) { 
 			echo ' data-apikey="'.$APIKey.'"';
 		}
+		
 		if(isset($selector) && (strlen($selector) >0) ) {
+			//If there is selector pass it to the chcontext
 			echo ' data-queryselector="'.$selector.'"';
+			//If there is also template  pass it too - chcontext.js will do the merge 
+			if(isset($template) && (strlen($template) >0) ) {
+				echo ' data-query="'.$template.'"';
+			}
 		} else {
+			//If there was no selector, but there is a template, do the merge of template and tags manually
+			if(isset($template) && (strlen($template) >0) ) {
+				$query = str_replace('$$', $query, $template);						
+			}
+			//and pass the final query to the chcontext
 			echo ' data-query="'.$query.'"';
 		}			
 		?>
@@ -158,6 +169,7 @@ class CHContext_Widget extends WP_Widget {
 		/* Strip tags for title and name to remove HTML (important for text inputs). */
 		$instance['title'] = strip_tags( $new_instance['title'] );
 		$instance['query_selector'] = strip_tags( $new_instance['query_selector'] );
+		$instance['query_template'] = strip_tags( $new_instance['query_template'] );
 		$instance['result_count'] = strip_tags( $new_instance['result_count'] );
 		$instance['show_thumbs'] = isset( $new_instance['show_thumbs'] );
 
@@ -179,7 +191,7 @@ class CHContext_Widget extends WP_Widget {
 	function form( $instance ) {
 
 		/* Set up some default widget settings. */
-		$defaults = array( 'title' => __('Related heritage', 'chcontext'), 'query_selector' => '', 'custom_function_name' => '', 'result_count' => 5, 'API_key' => '', 'provider' => 'FBC+', 'show_thumbs' => true);
+		$defaults = array( 'title' => __('Related heritage', 'chcontext'), 'query_selector' => '', 'query_template' => '', 'custom_function_name' => '', 'result_count' => 5, 'API_key' => '', 'provider' => 'FBC+', 'show_thumbs' => true);
 		$instance = wp_parse_args( (array) $instance, $defaults ); 
 		?>
 		
@@ -218,7 +230,13 @@ class CHContext_Widget extends WP_Widget {
 			<input id="<?php echo $this->get_field_id( 'query_selector' ); ?>" name="<?php echo $this->get_field_name( 'query_selector' ); ?>" value="<?php echo $instance['query_selector']; ?>" style="width:100%;" />
 		</p>
 	
-		
+		<!-- Query Template: Text Input -->
+		<p>
+			<label for="<?php echo $this->get_field_id( 'query_template' ); ?>"><?php _e('Query template (put \'$$\' as placeholder for query content):', 'chcontenxt'); ?></label>
+			<input id="<?php echo $this->get_field_id( 'query_template' ); ?>" name="<?php echo $this->get_field_name( 'query_template' ); ?>" value="<?php echo $instance['query_template']; ?>" style="width:100%;" />
+		</p>
+
+	
 		<!-- Provider: Listbox -->
 		<p>
 			<label for="<?php echo $this->get_field_id( 'provider' ); ?>"><?php _e('Data provider:', 'chcontext'); ?></label> 
@@ -238,6 +256,8 @@ class CHContext_Widget extends WP_Widget {
 			<input id="<?php echo $this->get_field_id( 'custom_function_name' ); ?>" name="<?php echo $this->get_field_name( 'custom_function_name' ); ?>" value="<?php echo $instance['custom_function_name']; ?>" style="width:100%;" />
 		</p>
 
+		<a href="https://github.com/psnc-dl/wp-chcontext/wiki/Installation-and-Configuration"><em>Configuration guide</em></a>
+		
 			<script type='text/javascript'>
 				//Method for configuring optional fields visibility
 				function setupFormFieldsVisibility<?php echo $this->number;?>() {			
