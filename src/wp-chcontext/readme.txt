@@ -8,7 +8,7 @@ Stable tag: 1.1
 License: EUPL v.1.1 (GPLv2 compatible)
 License URI: https://joinup.ec.europa.eu/software/page/eupl/licence-eupl
 
-Widget showing a list of links to free cultural heritage materials based on tags of currently displayed post or on predefined item of the website.
+Widget showing a list of links to free cultural heritage materials based on tags of currently displayed post or on predefined element of the website.
 
 == Description ==
 

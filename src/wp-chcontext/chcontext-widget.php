@@ -1,8 +1,8 @@
 <?php
 /**
- * Plugin Name: CHContext Widget
+ * Plugin Name: WP-CHContext (Widget)
  * Plugin URI: https://github.com/psnc-dl/wp-chcontext
- * Description: A widget that allows you to embed links to cultural heritage items from various sources, based on post tags.
+ * Description: Widget showing a list of links to free cultural heritage materials based on tags of currently displayed post or on predefined element of the website.
  * Version: 1.1
  * Author: PSNC Digital Libraries Team
  * Author URI: http://dl.psnc.pl/
