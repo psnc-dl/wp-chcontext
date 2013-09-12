@@ -21,11 +21,6 @@ This project was initiated and partially funded as a part of the [Europeana Awar
 
 ## Licence
 Copyright (c) 2013 Poznań Supercomputing and Networking Center  
-Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence"). 
+Licensed under the [EUPL, Version 1.1](https://joinup.ec.europa.eu/software/page/eupl/licence-eupl). 
 
-"Compatible Licences" according to article 5 EUPL are:
-* GNU General Public License (GNU GPL) v. 2
-* Open Software License (OSL) v. 2.1, v. 3.0
-* Common Public License v. 1.0
-* Eclipse Public License v. 1.0
-* Cecill v. 2.0 
+"Compatible Licences" according to article 5 EUPL are: GNU General Public License (GNU GPL) v. 2, Open Software License (OSL) v. 2.1, v. 3.0, Common Public License v. 1.0, Eclipse Public License v. 1.0, Cecill v. 2.0.
