@@ -1,7 +1,7 @@
 === WP-CHContext ===
 Contributors: mwerla
 Donate link: 
-Tags: cultural heritage,Europeana,digital libraries,FBC,related links
+Tags: cultural heritage, Europeana, digital libraries, FBC, DPLA, PCSS, PSNC, related, links, widget, sidebar
 Requires at least: 3.4
 Tested up to: 3.6
 Stable tag: 1.1
@@ -16,34 +16,40 @@ WP-CHContext is a WordPress plugin providing widget with the functionality based
 
 The plugin supports three data sources:
 
-* [Europeana](http://europeana.eu/) (with API key)
-* [Digital Public Library of America](http://dp.la/) (with API key)
-* [Polish Digital Libraries Federation](http://fbc.pionier.net.pl/) (without API key)
+<ul>
+<li><a href="http://europeana.eu/">Europeana</a> (with API key)</li>
+<li><a href="http://dp.la/">Digital Public Library of America</a> (with API key)</li>
+<li><a href="http://fbc.pionier.net.pl/">Polish Digital Libraries Federation</a> (without API key)</li>
+</ul>
 
-There is also possibility to define your own data provider(s) too. The widget look is customizable via CSS.
+There is also a possibility to define your own data provider. The widget look is customizable via CSS.
 
-Check [our wiki](https://github.com/psnc-dl/wp-chcontext/wiki/CHContext-WordPress-Plugin-Description) for more information.
+Check <a href="https://github.com/psnc-dl/wp-chcontext/wiki/CHContext-WordPress-Plugin-Description">our wiki</a> for more information.
 
 == Installation ==
 
 To install the plugin manually please do the following steps:
 
 1. Deactivate any previous version of WP-CHContext plugin through the 'Plugins' menu in your WordPress.
-1. Delete any previous version of WP-CHContext in the /wp-content/plugins/ directory (save custom.css and custom.js files if you modified them).
-1. Upload the entire wp-chcontext folder to the /wp-content/plugins/ directory (and add your custom.css and custom.js files if you modified them previously).
+2. Delete any previous version of WP-CHContext in the /wp-content/plugins/ directory (save custom.css and custom.js files if you modified them).
+3. Upload the entire wp-chcontext folder to the /wp-content/plugins/ directory (and add your custom.css and custom.js files if you modified them previously).
 
 Then, after installation:
 
 1. Activate the WP-CHContext plugin through the 'Plugins' menu in WordPress.
-1. Insert an instance of CHContext widget using the Widgets option in the Appearence menu of your WordPress administrator panel.
-1. Configure the plugin according to the [manual available here](https://github.com/psnc-dl/wp-chcontext/wiki/Installation-and-Configuration#configuration).
+2. Insert an instance of CHContext widget using the Widgets option in the Appearence menu of your WordPress administrator panel.
+3. Configure the plugin according to the <a href="https://github.com/psnc-dl/wp-chcontext/wiki/Installation-and-Configuration#configuration">manual available here</a>.
 
+== Screenshots ==
+
+1. Widget configuration panel.
+2. Widget embedded in example blog (top one in the right column).
 
 == Changelog ==
 
-= 1.1 =
+= 1.1 - 2013/09/10  =
 * Support for queries templates allowing to easily determine search scope.
 * CHContext script is now included in the plugin instead of linking to remote file.
 
-= 1.0 =
+= 1.0 - 2013/08/28 =
 * First public release.

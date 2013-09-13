@@ -1,10 +1,10 @@
 <?php
 /**
  * Plugin Name: WP-CHContext (Widget)
- * Plugin URI: https://github.com/psnc-dl/wp-chcontext
+ * Plugin URI: http://wordpress.org/plugins/wp-chcontext/
  * Description: Widget showing a list of links to free cultural heritage materials based on tags of currently displayed post or on predefined element of the website.
  * Version: 1.1
- * Author: PSNC Digital Libraries Team
+ * Author: Marcin Werla, PSNC Digital Libraries Team
  * Author URI: http://dl.psnc.pl/
  *
  * This program is distributed in the hope that it will be useful,
