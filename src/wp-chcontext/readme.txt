@@ -53,3 +53,7 @@ Then, after installation:
 
 = 1.0 - 2013/08/28 =
 * First public release.
+
+== Upgrade Notice ==
+
+Remember to backup any modifications you made to custom.css and custom.js files before updating!
